@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>教育部因材網時空學園｜互動式使用者操作手冊</title>
+  <meta name="description" content="網頁版教育部因材網時空學園互動式使用者操作手冊：涵蓋登入、大廳功能、關卡碼搜尋、個人頁面、星球活動、單人冒險、組隊冒險、黑洞任務與油料系統，邊玩邊學一次上手！" />
+
+  <!-- Google Fonts：繁體中文粉圓體 Huninn + Noto Sans TC（備援）+ 科技數字 Orbitron -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;600;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+
+  <!-- 全面使用 Font Awesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- 主樣式表 -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 頂部閱讀進度條 -->
+  <div class="reading-progress-track" aria-hidden="true">
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+  </div>
+
+  <!-- 動態星雲粒子畫布與繽紛霓虹背景光暈 -->
+  <canvas id="starfield-canvas" aria-hidden="true"></canvas>
+  <div class="ambient-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- 頂部固定導覽列 -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="開啟章節目錄">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="#top" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-shuttle-space"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">教育部因材網時空學園</span>
+          <span class="brand-sub">完整章節互動式使用者操作手冊</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 即時全文搜尋 -->
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        id="global-search-input"
+        placeholder="搜尋功能或步驟（例：戰寵、QR code、油料、魔王）"
+        autocomplete="off"
+      />
+      <button class="search-clear-btn" id="search-clear-btn" aria-label="清除搜尋">
+        <i class="fa-solid fa-circle-xmark"></i>
+      </button>
+      <div class="search-results-dropdown" id="search-results-dropdown"></div>
+    </div>
+
+    <!-- 右側注音輔助、冒險能量 XP、音效與主題切換 -->
+    <div class="topbar-actions">
+      <button class="bopomofo-toggle-btn" id="bopomofo-toggle-btn" title="開啟/關閉全站注音輔助（幫助國小生閱讀）" aria-label="切換注音輔助" aria-pressed="false">
+        <i class="fa-solid fa-language"></i>
+        <span>注音</span>
+      </button>
+      <button class="xp-pill" id="xp-pill-btn" title="查看已收集的時空徽章">
+        <i class="fa-solid fa-trophy"></i>
+        <strong id="xp-value">0 XP</strong>
+        <span>(<em id="badge-count" style="font-style:normal;">0/9</em> 徽章)</span>
+      </button>
+      <button class="icon-btn" id="sound-toggle-btn" title="切換互動音效" aria-label="切換互動音效">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+      <button class="icon-btn" id="theme-toggle-btn" title="切換深色星際 / 淺色糖果主題" aria-label="切換主題">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主版面結構 -->
+  <div class="app-layout" id="top">
+    <!-- 左側章節導覽側邊欄 -->
+    <aside class="sidebar" id="sidebar" aria-label="章節導覽">
+      <div class="sidebar-section-label">
+        <i class="fa-solid fa-compass"></i> 時空學園 9 大章節
+      </div>
+      <ul class="chapter-nav-list" id="chapter-nav-list"></ul>
+
+      <div class="sidebar-section-label" style="margin-top:22px;">
+        <i class="fa-solid fa-gamepad"></i> 互動加碼挑戰
+      </div>
+      <ul class="chapter-nav-list">
+        <li>
+          <a href="#quiz-section" class="chapter-nav-btn" style="text-decoration:none;">
+            <span class="chapter-nav-icon" style="background:var(--grad-cyber);">
+              <i class="fa-solid fa-bolt"></i>
+            </span>
+            <span class="chapter-nav-meta">
+              <span class="chapter-nav-num">BONUS</span>
+              <span class="chapter-nav-name">隨堂闖關大挑戰</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- 右側主內容區 -->
+    <main class="main-content">
+      <div class="content-container">
+        <!-- 繽紛星際英雄橫幅 -->
+        <section class="hero-banner">
+          <div class="hero-badge">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            教育部因材網時空學園
+          </div>
+          <h1 class="hero-title">
+            探索 <span>時空學園</span><br />
+            互動式使用者操作手冊與實戰模擬
+          </h1>
+          <p class="hero-desc">
+            不再只是靜態翻頁！透過逐步互動圖解、高清實機截圖放大檢視、2026 動態魔王實機展示，以及五大內建迷你模擬器，帶你邊玩邊學，3 分鐘成為時空學園全能達人！
+          </p>
+          <div class="hero-cta-row">
+            <a href="#ch-login" class="btn btn-primary">
+              <i class="fa-solid fa-rocket"></i> 從第 01 章開始啟航
+            </a>
+            <a href="#ch-solo" class="btn btn-secondary">
+              <i class="fa-solid fa-dragon"></i> 直衝單人冒險實戰模擬
+            </a>
+            <a href="#quiz-section" class="btn btn-secondary">
+              <i class="fa-solid fa-trophy"></i> 挑戰隨堂測驗
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-chip">
+              <i class="fa-solid fa-book-atlas"></i>
+              <div>
+                <div class="stat-num">9 大章節</div>
+                <div class="stat-label">完整涵蓋 73 頁操作指引</div>
+              </div>
+            </div>
+            <div class="stat-chip">
+              <i class="fa-solid fa-gamepad"></i>
+              <div>
+                <div class="stat-num">5 大模擬器</div>
+                <div class="stat-label">大廳、搜尋、答題、組隊、加油</div>
+              </div>
+            </div>
+            <div class="stat-chip">
+              <i class="fa-solid fa-film"></i>
+              <div>
+                <div class="stat-num">2026 動態魔王</div>
+                <div class="stat-label">4 組原汁原味動態實機圖鑑</div>
+              </div>
+            </div>
+            <div class="stat-chip">
+              <i class="fa-solid fa-medal"></i>
+              <div>
+                <div class="stat-num">9 枚徽章</div>
+                <div class="stat-label">收集時空能量 XP 解鎖成就</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 九大章節快速導覽網格 -->
+        <section aria-label="章節快速導覽">
+          <div class="section-heading">
+            <h2><i class="fa-solid fa-map-location-dot"></i> 快速跳轉九大章節</h2>
+            <span style="font-size:0.86rem;color:var(--text-muted);font-weight:700;">
+              <i class="fa-solid fa-hand-pointer"></i> 點擊任一卡片直接傳送至該章節
+            </span>
+          </div>
+          <div class="overview-grid" id="overview-grid"></div>
+        </section>
+
+        <!-- 九大章節詳細互動步驟與模擬器容器 -->
+        <div id="chapters-container"></div>
+
+        <!-- 綜合隨堂闖關測驗 -->
+        <section class="quiz-section" id="quiz-section">
+          <div class="section-heading" style="margin-bottom:20px;">
+            <h2 style="color:#fff;"><i class="fa-solid fa-graduation-cap" style="color:var(--neon-gold);"></i> 時空學園隨堂闖關大挑戰</h2>
+            <span class="sim-badge"><i class="fa-solid fa-bolt"></i> 每答對 1 題 +20 XP</span>
+          </div>
+          <div id="quiz-container"></div>
+        </section>
+
+        <!-- 頁尾：上方 FB 粉絲專頁 ICON + 下方 Copyright -->
+        <footer class="site-footer">
+          <a
+            href="https://www.facebook.com/happyliyuchilltiger/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fb-fanpage-link"
+            aria-label="前往 FB 粉絲專頁 快樂鯉魚秋老虎"
+          >
+            <i class="fa-brands fa-facebook"></i>
+            <span>快樂鯉魚秋老虎</span>
+          </a>
+          <p class="copyright-text">Copyright © Liyuchiutiger Gongminshen</p>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- 左下角可自由拖曳吉祥物（懸停霓虹彩色發光抖動） -->
+  <div class="mascot-widget" id="mascot-widget" title="拖曳我到任何地方！點擊看小秘訣">
+    <div class="mascot-bubble" id="mascot-bubble">
+      <i class="fa-solid fa-comment-dots" style="color:var(--neon-cyan);"></i>
+      嗨！我是快樂鯉魚秋老虎，按住我可以拖曳到畫面任何地方喔！
+    </div>
+    <img
+      src="image/LiyuChillGuy.svg"
+      alt="快樂鯉魚秋老虎吉祥物"
+      class="mascot-img"
+      draggable="false"
+    />
+    <span class="mascot-drag-hint"><i class="fa-solid fa-up-down-left-right"></i> 可任意拖曳</span>
+  </div>
+
+  <!-- 回到頂部按鈕 -->
+  <button class="back-to-top" id="back-to-top" aria-label="回到頂部">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- 截圖放大 Lightbox 彈窗 -->
+  <div class="modal-overlay" id="lightbox-modal" role="dialog" aria-modal="true" aria-label="截圖放大檢視">
+    <div class="lightbox-content">
+      <button class="modal-close-btn" id="lightbox-close" aria-label="關閉放大檢視">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <img id="lightbox-img" src="" alt="" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- 時空徽章收集冊彈窗 -->
+  <div class="modal-overlay" id="badge-modal" role="dialog" aria-modal="true" aria-label="時空徽章收集冊">
+    <div class="badge-modal-card">
+      <button class="modal-close-btn" id="badge-modal-close" aria-label="關閉徽章收集冊" style="top:14px;right:14px;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3 style="font-size:1.35rem;display:flex;align-items:center;gap:10px;">
+        <i class="fa-solid fa-trophy" style="color:var(--neon-gold);"></i> 時空冒險者徽章收集冊
+      </h3>
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-top:6px;">
+        完成各章節步驟並點擊「標記學會」，即可解鎖專屬徽章並累積時空能量 XP！
+      </p>
+      <div class="badges-grid" id="badges-grid"></div>
+    </div>
+  </div>
+
+  <!-- Toast 提示通知容器 -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- 腳本載入 -->
+  <script src="js/manual-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
