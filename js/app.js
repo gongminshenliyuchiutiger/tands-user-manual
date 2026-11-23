@@ -1343,18 +1343,16 @@
   }
 
   /* ==========================================================================
-     10. 左下角吉祥物（任意拖曳移動 + 懸停霓虹發光抖動 + 互動語錄）
+     10. 左下角吉祥物（任意拖曳移動 + 懸停霓虹發光抖動）
      ========================================================================== */
   function initDraggableMascot() {
     const mascot = document.getElementById('mascot-widget');
-    const bubble = document.getElementById('mascot-bubble');
-    if (!mascot || !bubble) return;
+    if (!mascot) return;
 
     let isDragging = false;
     let movedDistance = 0;
     let startX = 0, startY = 0;
     let origLeft = 0, origTop = 0;
-    let quoteIdx = 0;
 
     mascot.addEventListener('pointerdown', e => {
       isDragging = true;
@@ -1396,13 +1394,8 @@
       mascot.classList.remove('dragging');
       try { mascot.releasePointerCapture(e.pointerId); } catch (_) {}
 
-      // 若幾乎沒移動，視為點擊吉祥物，切換趣味導覽小語
       if (movedDistance < 6) {
         playTone('pop');
-        quoteIdx = (quoteIdx + 1) % window.MASCOT_QUOTES.length;
-        bubble.innerHTML = `<i class="fa-solid fa-comment-dots" style="color:var(--neon-cyan);"></i> ${window.MASCOT_QUOTES[quoteIdx]}`;
-        mascot.classList.add('show-bubble');
-        setTimeout(() => mascot.classList.remove('show-bubble'), 3600);
       }
     }
 

@@ -1726,33 +1726,6 @@ body.theme-light .site-footer {
   cursor: grabbing;
 }
 
-.mascot-bubble {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 0;
-  min-width: 190px;
-  max-width: 240px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.92);
-  color: #f8fafc;
-  border: 1px solid var(--neon-cyan);
-  font-size: 0.82rem;
-  font-weight: 700;
-  line-height: 1.45;
-  box-shadow: 0 8px 25px rgba(0, 245, 255, 0.3);
-  opacity: 0;
-  transform: translateY(8px) scale(0.92);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.mascot-widget:hover .mascot-bubble,
-.mascot-widget.show-bubble .mascot-bubble {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
 .mascot-img {
   width: 108px;
   height: auto;
